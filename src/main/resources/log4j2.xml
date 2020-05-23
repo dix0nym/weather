@@ -10,11 +10,9 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Logger name="org.apache.log4j.xml" level="debug">
-      <AppenderRef ref="A1"/>
-    </Logger>
-    <Root level="debug">
+    <Root level="all">
       <AppenderRef ref="STDOUT"/>
+      <AppenderRef ref="A1"/>
     </Root>
   </Loggers>
 </Configuration>

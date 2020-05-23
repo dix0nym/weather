@@ -1,14 +1,16 @@
 package de.fh.albsig.hs88546.openweather;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -25,13 +27,21 @@ public class OpenWeather {
   private String apiKey = "d380ea7a6cbc8de8181f9cdc96df5982";
 
   private final String baseurl = "https://api.openweathermap.org/data/2.5/weather";
+  private final OpenWeatherParser parser;
 
   public OpenWeather() {
+    this.parser = new OpenWeatherParser();
   }
 
+  /**
+   * Overloaded OpenWeather Constructor to pass a API key.
+   *
+   * @param apiKey API-Key to use in requests
+   */
   public OpenWeather(String apiKey) {
     logger.info("setting apiKey to {}", apiKey);
     this.apiKey = apiKey;
+    this.parser = new OpenWeatherParser();
   }
 
   /**
@@ -48,7 +58,7 @@ public class OpenWeather {
     if (jobj == null) {
       return null;
     }
-    return this.parseJsonResponse(jobj);
+    return this.parser.parseJsonResponse(jobj);
   }
 
   /**
@@ -65,7 +75,7 @@ public class OpenWeather {
     if (jobj == null) {
       return null;
     }
-    return this.parseJsonResponse(jobj);
+    return this.parser.parseJsonResponse(jobj);
   }
 
   /**
@@ -75,108 +85,61 @@ public class OpenWeather {
    * @param lon Longitude
    * @return Weather
    */
-  public Weather getByCoords(int lat, int lon) {
+  public Weather getByCoords(double lat, double lon) {
     logger.info("requested weather by coordinates: {}|{}", lat, lon);
-    final String url = String.format("%s?lat=%d&lon=%d&appid=%s&units=metric", this.baseurl, lat,
+    final String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=metric", this.baseurl, lat,
         lon, this.apiKey);
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
     }
-    return this.parseJsonResponse(jobj);
+    return this.parser.parseJsonResponse(jobj);
   }
 
   /**
    * Returns Weather by ZIP-Code and Country.
    *
-   * @param code    zip-code
-   * @param country zip in country
+   * @param code    ZIP-code
+   * @param country ZIP in country
    * @return Weather
    */
   public Weather getByZip(int code, String country) {
     logger.info("requested weather by zip: {} in {}", code, country);
-    final String url = String.format("%s?zip=code,country&appid=%&units=metrics", this.baseurl,
-        code, country, this.apiKey);
+    final String url = String.format("%s?zip=%d,%s&appid=%s&units=metrics", this.baseurl, code,
+        country, this.apiKey);
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
     }
-    return this.parseJsonResponse(jobj);
-  }
-
-  private double getDouble(JSONObject jobj, String key) {
-    return ((Number) jobj.get(key)).doubleValue();
-  }
-
-  /**
-   * Tries to parse JSONObject to Weather.
-   *
-   * @param jobj JObject to parse
-   * @return Weather
-   */
-  private Weather parseJsonResponse(JSONObject jobj) {
-    logger.info("parsing json response to weather obj");
-    try {
-      final Weather weather = new Weather();
-
-      final String city = jobj.get("name").toString();
-      weather.setCity(city);
-
-      final JSONObject coords = (JSONObject) jobj.get("coord");
-      weather.setLon(this.getDouble(coords, "lon"));
-      weather.setLat(this.getDouble(coords, "lat"));
-
-      final JSONObject main = (JSONObject) jobj.get("main");
-      weather.setTemp(this.getDouble(main, "temp"));
-      weather.setTempMin(this.getDouble(main, "temp_min"));
-      weather.setTempMax(this.getDouble(main, "temp_max"));
-      weather.setPressure((long) main.get("pressure"));
-      weather.setHumidity((long) main.get("humidity"));
-
-      final JSONObject wind = (JSONObject) jobj.get("wind");
-      weather.setWind_speed(this.getDouble(wind, "speed"));
-      weather.setWind_deg((long) wind.get("deg"));
-
-      final JSONArray weatherArray = (JSONArray) jobj.get("weather");
-      final JSONObject wObj = (JSONObject) weatherArray.get(0);
-      weather.setDescription(wObj.get("main").toString());
-      weather.setFullDescription(wObj.get("description").toString());
-
-      return weather;
-    } catch (final NullPointerException e) {
-      logger.error("failed to parse weather obj from json: {} {}", e.getMessage(), e);
-    }
-    return null;
+    return this.parser.parseJsonResponse(jobj);
   }
 
   /**
    * Performs HTTP-Get request at URL and tries to parse response as JSON.
    *
-   * @param url url to request
+   * @param url requested URL
    * @return JSONObject
    */
-  private JSONObject performRequest(String url) {
+  public JSONObject performRequest(String url) {
     logger.info("requesting Weather data");
     try {
-      final URL urlObj = new URL(url);
-      final HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
-      conn.setRequestMethod("GET");
-      conn.connect();
-
-      final int status_code = conn.getResponseCode();
-
-      if (status_code != 200) {
-        // error handling
-        logger.error("failed to perform API-Request: {}", status_code);
-        return null;
-      }
-      final StringBuilder response = new StringBuilder();
-      try (BufferedReader br = new BufferedReader(
-          new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-        String responseLine = null;
-        while ((responseLine = br.readLine()) != null) {
-          response.append(responseLine.trim());
+      CloseableHttpClient httpclient = HttpClients.createDefault();
+      HttpGet httpGet = new HttpGet(url);
+      CloseableHttpResponse response = httpclient.execute(httpGet);
+      String body = null;
+      try {
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode != 200) {
+          logger.error("failed to perform API-Request: {}", statusCode);
+          return null;
         }
+        body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+      } finally {
+        response.close();
+      }
+      if (StringUtils.isEmpty(body)) {
+        logger.error("Response of API-Call was empty: {}", url);
+        return null;
       }
       final JSONParser jparser = new JSONParser();
       final JSONObject jobj = (JSONObject) jparser.parse(response.toString());

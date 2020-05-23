@@ -15,21 +15,21 @@ import org.w3c.dom.Element;
 
 public class Weather {
   private static Logger logger = LogManager.getLogger(Weather.class);
-
+  private int cityId;
   private String city;
   private String description;
-  private String fullDescription;
-  private long humidity;
+  private int humidity;
   private double lat;
   private double lon;
-  private long pressure;
+  private int pressure;
 
   private double temp;
   private double tempMax;
   private double tempMin;
 
-  private long windDeg;
+  private int windDeg;
   private double windSpeed;
+  private String country;
 
   public Weather() {
   }
@@ -37,30 +37,32 @@ public class Weather {
   /**
    * Weather Constructor.
    *
-   * @param description     description of weather
-   * @param fullDescription full description of weather
-   * @param temp            current temperature
-   * @param pressure        current pressure
-   * @param humidity        current humidity
-   * @param tempMin         current minimal temperature
-   * @param tempMax         current maximal temperature
-   * @param city            name of city
-   * @param windSpeed       current speed of wind
-   * @param windDeg         current degree of wind
-   * @param lon             longitude of city
-   * @param lat             latitude of city
+   * @param description description of weather
+   * @param id          id of city
+   * @param city        name of city
+   * @param country     country of city
+   * @param temp        current temperature
+   * @param pressure    current pressure
+   * @param humidity    current humidity
+   * @param tempMin     current minimal temperature
+   * @param tempMax     current maximal temperature
+   * @param windSpeed   current speed of wind
+   * @param windDeg     current degree of wind
+   * @param lon         longitude of city
+   * @param lat         latitude of city
    */
-  public Weather(String description, String fullDescription, double temp, long pressure,
-      int humidity, double tempMin, double tempMax, String city, double windSpeed, int windDeg,
+  public Weather(int id, String city, String country, String description, int pressure,
+      int humidity, double temp, double tempMin, double tempMax, double windSpeed, int windDeg,
       double lon, double lat) {
+    this.cityId = id;
+    this.city = city;
+    this.country = country;
     this.description = description;
-    this.fullDescription = fullDescription;
-    this.temp = temp;
     this.pressure = pressure;
     this.humidity = humidity;
+    this.temp = temp;
     this.tempMin = tempMin;
     this.tempMax = tempMax;
-    this.city = city;
     this.windSpeed = windSpeed;
     this.windDeg = windDeg;
     this.lon = lon;
@@ -75,11 +77,7 @@ public class Weather {
     return this.description;
   }
 
-  public String getFullDescription() {
-    return this.fullDescription;
-  }
-
-  public long getHumidity() {
+  public int getHumidity() {
     return this.humidity;
   }
 
@@ -91,7 +89,7 @@ public class Weather {
     return this.lon;
   }
 
-  public long getPressure() {
+  public int getPressure() {
     return this.pressure;
   }
 
@@ -107,7 +105,7 @@ public class Weather {
     return this.tempMin;
   }
 
-  public long getWind_deg() {
+  public int getWind_deg() {
     return this.windDeg;
   }
 
@@ -123,11 +121,7 @@ public class Weather {
     this.description = description;
   }
 
-  public void setFullDescription(String fullDescription) {
-    this.fullDescription = fullDescription;
-  }
-
-  public void setHumidity(long humidity) {
+  public void setHumidity(int humidity) {
     this.humidity = humidity;
   }
 
@@ -139,7 +133,7 @@ public class Weather {
     this.lon = lon;
   }
 
-  public void setPressure(long pressure) {
+  public void setPressure(int pressure) {
     this.pressure = pressure;
   }
 
@@ -155,12 +149,28 @@ public class Weather {
     this.tempMin = tempMin;
   }
 
-  public void setWind_deg(long windDeg) {
+  public void setWind_deg(int windDeg) {
     this.windDeg = windDeg;
   }
 
   public void setWind_speed(double windSpeed) {
     this.windSpeed = windSpeed;
+  }
+
+  public int getCityId() {
+    return this.cityId;
+  }
+
+  public void setCityId(int id) {
+    this.cityId = id;
+  }
+
+  public String getCountry() {
+    return this.country;
+  }
+
+  public void setCountry(String country) {
+    this.country = country;
   }
 
   /**
@@ -181,7 +191,7 @@ public class Weather {
       rootElement.appendChild(nameElement);
 
       final Element fullDescElement = doc.createElement("description");
-      fullDescElement.appendChild(doc.createTextNode(this.getFullDescription()));
+      fullDescElement.appendChild(doc.createTextNode(this.getDescription()));
       rootElement.appendChild(fullDescElement);
 
       final Element tempElement = doc.createElement("temp");
