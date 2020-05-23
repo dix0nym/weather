@@ -3,10 +3,10 @@ package de.fh.albsig.hs88546.openweather;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -27,7 +27,6 @@ public class OpenWeather {
 
   private String apiKey = "d380ea7a6cbc8de8181f9cdc96df5982";
 
-  private final String baseurl = "https://api.openweathermap.org/data/2.5/weather";
   private final OpenWeatherParser parser;
 
   public OpenWeather() {
@@ -53,8 +52,11 @@ public class OpenWeather {
    */
   public Weather getByCityId(int cityId) {
     logger.info("requested weather by cityId: {}", cityId);
-    final String url = String.format("%s?id=%d&appid=%s&units=metric", this.baseurl, cityId,
-        this.apiKey);
+    URIBuilder builder = new URIBuilder();
+    builder.setScheme("https").setHost("api.openweathermap.org").setPath("/data/2.5/weather")
+        .addParameter("id", String.valueOf(cityId)).addParameter("appid", this.apiKey)
+        .addParameter("units", "metric");
+    String url = builder.toString();
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
@@ -70,15 +72,10 @@ public class OpenWeather {
    */
   public Weather getByCityName(String city) {
     logger.info("requested weather by name: {}", city);
-//    URIBuilder builder = new URIBuilder();
-//    builder
-//      .setScheme("https")
-//      .setHost("api.openweathermap.org")
-//      .setPath("/data/2.5/weather")
-//      .add;
-//    "https://api.openweathermap.org/data/2.5/weather";
-    final String url = String.format("%s?q=%s&appid=%s&units=metric", this.baseurl, city,
-        this.apiKey);
+    URIBuilder builder = new URIBuilder();
+    builder.setScheme("https").setHost("api.openweathermap.org").setPath("/data/2.5/weather")
+        .addParameter("q", city).addParameter("appid", this.apiKey).addParameter("units", "metric");
+    String url = builder.toString();
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
@@ -95,8 +92,11 @@ public class OpenWeather {
    */
   public Weather getByCoords(double lat, double lon) {
     logger.info("requested weather by coordinates: {}|{}", lat, lon);
-    final String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=metric", this.baseurl, lat,
-        lon, this.apiKey);
+    URIBuilder builder = new URIBuilder();
+    builder.setScheme("https").setHost("api.openweathermap.org").setPath("/data/2.5/weather")
+        .addParameter("lat", String.valueOf(lat)).addParameter("lon", String.valueOf(lon))
+        .addParameter("appid", this.apiKey).addParameter("units", "metric");
+    String url = builder.toString();
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
@@ -113,8 +113,11 @@ public class OpenWeather {
    */
   public Weather getByZip(int code, String country) {
     logger.info("requested weather by zip: {} in {}", code, country);
-    final String url = String.format("%s?zip=%d,%s&appid=%s&units=metrics", this.baseurl, code,
-        country, this.apiKey);
+    URIBuilder builder = new URIBuilder();
+    builder.setScheme("https").setHost("api.openweathermap.org").setPath("/data/2.5/weather")
+        .addParameter("zip", String.format("%d,%s", code, country))
+        .addParameter("appid", this.apiKey).addParameter("units", "metric");
+    String url = builder.toString();
     final JSONObject jobj = this.performRequest(url);
     if (jobj == null) {
       return null;
