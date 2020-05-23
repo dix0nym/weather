@@ -3,6 +3,7 @@ package de.fh.albsig.hs88546.openweather;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -69,6 +70,13 @@ public class OpenWeather {
    */
   public Weather getByCityName(String city) {
     logger.info("requested weather by name: {}", city);
+//    URIBuilder builder = new URIBuilder();
+//    builder
+//      .setScheme("https")
+//      .setHost("api.openweathermap.org")
+//      .setPath("/data/2.5/weather")
+//      .add;
+//    "https://api.openweathermap.org/data/2.5/weather";
     final String url = String.format("%s?q=%s&appid=%s&units=metric", this.baseurl, city,
         this.apiKey);
     final JSONObject jobj = this.performRequest(url);
@@ -142,7 +150,7 @@ public class OpenWeather {
         return null;
       }
       final JSONParser jparser = new JSONParser();
-      final JSONObject jobj = (JSONObject) jparser.parse(response.toString());
+      final JSONObject jobj = (JSONObject) jparser.parse(body);
       return jobj;
     } catch (final MalformedURLException e) {
       logger.error("failed to generate valid url: {} {}", e.getMessage(), e);
