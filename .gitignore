@@ -12,3 +12,4 @@ buildNumber.properties
 .settings/
 .project
 .classpath
+src/main/resources/log4j.log

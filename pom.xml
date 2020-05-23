@@ -140,6 +140,9 @@
 							<version>8.32</version>
 						</dependency>
 					</dependencies>
+					<configuration>
+					   <configLocation>src/main/resources/checkstyle.xml</configLocation>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>com.github.spotbugs</groupId>
@@ -175,7 +178,7 @@
 					<configLocation>src/main/resources/checkstyle.xml</configLocation>
 					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
-					<linkXRef>false</linkXRef>
+					<!-- <linkXRef>false</linkXRef> -->
 				</configuration>
 				<reportSets>
 					<reportSet>
