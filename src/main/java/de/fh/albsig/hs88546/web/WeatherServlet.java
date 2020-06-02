@@ -27,6 +27,14 @@ public class WeatherServlet extends HttpServlet {
     super();
   }
 
+  private void writeHtml(HttpServletResponse resp, PrintWriter writer, String title, String msg) {
+    resp.setContentType("text/html");
+    writer.println("<h1>" + title + "</h1>");
+    writer.println("<p>" + msg + "</p>");
+    writer.flush();
+    writer.close();
+  }
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
@@ -54,10 +62,7 @@ public class WeatherServlet extends HttpServlet {
         logger.info("requested with parameter: {} {}", code, country);
         weather = ow.getByZip(Integer.parseInt(code), country);
       } else {
-        resp.setContentType("text/plain");
-        writer.println("Missing paramter: city|cityId|lat&lon|code&country");
-        writer.flush();
-        writer.close();
+        this.writeHtml(resp, writer, "Error", "Missing paramter: city|cityId|lat&lon|code&country");
         logger.error("Missing paramter: city|cityId|lat&lon|code&country");
         return;
       }
@@ -65,7 +70,7 @@ public class WeatherServlet extends HttpServlet {
       writer.flush();
       writer.close();
     } catch (final Exception e) {
-      logger.error("{} {}", lat, lon);
+      this.writeHtml(resp, writer, "Error", e.getMessage());
       logger.error("Error in WeatherServlet: {} {}", e.getMessage(), e.getStackTrace());
     }
   }
