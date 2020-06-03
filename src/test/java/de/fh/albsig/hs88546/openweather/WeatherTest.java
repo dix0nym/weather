@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -104,6 +107,20 @@ public class WeatherTest {
     this.testWeather.setWind_speed(2.24);
     assertEquals(this.weather.getWind_deg(), this.testWeather.getWind_deg());
     assertEquals(this.weather.getWind_speed(), this.testWeather.getWind_speed());
+  }
+
+  @Test
+  public void testToXml() throws Exception {
+    File testFile = new File("src/test/resources/weather.xml");
+    // read file to string and add to mock
+    try (FileInputStream fis = new FileInputStream(testFile)) {
+      byte[] data = new byte[(int) testFile.length()];
+      fis.read(data);
+      String str = new String(data, "UTF-8");
+      when(this.weather.toXml()).thenReturn(str);
+    }
+    assertEquals(this.testWeather.toXml(), this.testWeather.toXml());
+
   }
 
   @AfterEach

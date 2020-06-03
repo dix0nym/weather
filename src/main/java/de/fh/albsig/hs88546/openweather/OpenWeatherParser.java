@@ -13,12 +13,25 @@ import org.json.simple.parser.ParseException;
 public class OpenWeatherParser {
   private static Logger logger = LogManager.getLogger(OpenWeatherParser.class);
 
-  private double getDouble(JSONObject jobj, String key) {
+  private Double getDouble(JSONObject jobj, String key) {
+    if (!jobj.containsKey(key)) {
+      return null;
+    }
     return ((Number) jobj.get(key)).doubleValue();
   }
 
-  private int getInt(JSONObject jobj, String key) {
+  private Integer getInt(JSONObject jobj, String key) {
+    if (!jobj.containsKey(key)) {
+      return null;
+    }
     return ((Number) jobj.get(key)).intValue();
+  }
+
+  private String getString(JSONObject jobj, String key) {
+    if (!jobj.containsKey(key)) {
+      return null;
+    }
+    return jobj.get(key).toString();
   }
 
   /**
@@ -54,7 +67,7 @@ public class OpenWeatherParser {
     try {
       final Weather weather = new Weather();
 
-      final String city = jobj.get("name").toString();
+      final String city = this.getString(jobj, "name");
       weather.setCity(city);
 
       weather.setCityId(this.getInt(jobj, "id"));
@@ -76,16 +89,16 @@ public class OpenWeatherParser {
 
       final JSONArray weatherArray = (JSONArray) jobj.get("weather");
       final JSONObject wObj = (JSONObject) weatherArray.get(0);
-      weather.setDescription(wObj.get("description").toString());
+      weather.setDescription(this.getString(wObj, "description"));
 
       final JSONObject sysObj = (JSONObject) jobj.get("sys");
-      weather.setCountry(sysObj.get("country").toString());
+      weather.setCountry(this.getString(sysObj, "country"));
 
       return weather;
     } catch (final NullPointerException e) {
-      logger.error("failed to parse weather obj from json: {} {}", e.getMessage(), e);
+      logger.error("failed to parse weather obj from json: {}", e.getMessage());
     } catch (final Exception e) {
-      logger.error("failed to parse: {}\n{}", e.getMessage(), e.getStackTrace());
+      logger.error("failed to parse: {}", e.getMessage());
     }
     return null;
   }
