@@ -2,7 +2,7 @@
 
 ## Installation
 
-```
+```bash
 $ git clone https://github.com/dix0nym/weather.git
 $ cd weather
 $ mvn clean install
@@ -10,7 +10,7 @@ $ mvn clean install
 
 ## Usage
 
-```
+```bash
 $ mvn spring-boot:run
 ```
 
@@ -20,22 +20,22 @@ im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/
 
 * `/weather/city/{city}`
   * STRING `city` - Name der Stadt - z. B. Albstadt
-  * Beispiel: `/weather/city/albstadt`
+  * Beispiel: [/weather/city/albstadt](http://127.0.0.1:8080/weather/city/albstadt)
 
 * `/weather/id/{id}`
   * INT `id` - Id der Stadt z. B. 2958595
   * vollständige List in [city.list.json.gz](http://bulk.openweathermap.org/sample/) von OpenWeatherMap
-  * Beispiel: `/weather/id/2958595`
+  * Beispiel: [/weather/id/2958595](http://127.0.0.1:8080/weather/id/2958595)
 
 * `/weather/coords/{lat}/{lon}`
   * DOUBLE `lat` - Latitude
   * DOUBLE `lon` - Longitude
-  * Beispiel: `weather/coords/9/48`
+  * Beispiel: [weather/coords/9/48](http://127.0.0.1:8080/weather/coords/9/48)
 
 * `/weather/zip/{code}/{country}`
   * INT `code` = Postleitzahl - z. B. 72458
   * STRING `country` = [Ländercode](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) z. B. de, us, it
-  * Beispiel: `/weather/zip/72458/de`
+  * Beispiel: [/weather/zip/72458/de](http://127.0.0.1:8080/weather/weather/zip/72458/de)
 
 ## Tools
 
