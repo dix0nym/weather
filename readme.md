@@ -8,6 +8,14 @@ $ cd weather
 $ mvn clean install
 ```
 
+## Usage
+
+```
+$ mvn spring-boot:run
+```
+
+im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/weather/city/albstadt)
+
 ## API-Endpoints
 
 * `/weather/city/{city}`
