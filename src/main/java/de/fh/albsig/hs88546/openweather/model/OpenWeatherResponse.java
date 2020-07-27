@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "coord", "weather", "wind", "sys", "id", "name", })
+@JsonPropertyOrder({ "coord", "weather", "wind", "id", "name", "country" })
 public class OpenWeatherResponse {
 
   @JsonProperty("coord")
@@ -34,10 +34,12 @@ public class OpenWeatherResponse {
   @JsonProperty("wind")
   private Wind wind;
   @JsonIgnore
+  private Rain rain;
+  @JsonIgnore
   private Clouds clouds;
   @JsonIgnore
   private Integer dt;
-  @JsonProperty("sys")
+  @JsonIgnore
   private Sys sys;
   @JsonIgnore
   private Integer timezone;
@@ -108,6 +110,16 @@ public class OpenWeatherResponse {
   @JsonProperty("wind")
   public void setWind(Wind wind) {
     this.wind = wind;
+  }
+
+  @JsonIgnore
+  public Rain getRain() {
+    return rain;
+  }
+
+  @JsonProperty("rain")
+  public void setRain(Rain rain) {
+    this.rain = rain;
   }
 
   @JsonIgnore

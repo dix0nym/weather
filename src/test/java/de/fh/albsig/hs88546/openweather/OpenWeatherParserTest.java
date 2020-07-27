@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -71,38 +72,11 @@ public class OpenWeatherParserTest {
     when(this.openweather.getByZip(Mockito.anyInt(), Mockito.anyString())).thenReturn(json);
   }
 
-  private boolean check(OpenWeatherResponse response) {
-    boolean id = response.getId() == 2958595;
-    boolean name = response.getName().equals("Albstadt");
-    return id && name;
-  }
-
   @Test
-  public void testByCityId() throws Exception {
+  @DisplayName("testing OpenWeatherParser")
+  public void TestParser() throws Exception {
     String json = this.openweather.getByCityId(1);
     OpenWeatherResponse response = this.parser.parseJson(json);
-    assertTrue(check(response));
+    assertTrue(response.getId() == 2958595 && response.getName().equals("Albstadt"));
   }
-
-  @Test
-  public void testByCityName() throws Exception {
-    String json = this.openweather.getByCityName("test");
-    OpenWeatherResponse response = this.parser.parseJson(json);
-    assertTrue(check(response));
-  }
-
-  @Test
-  public void testByCoords() throws Exception {
-    String json = this.openweather.getByCoords(1, 1);
-    OpenWeatherResponse response = this.parser.parseJson(json);
-    assertTrue(check(response));
-  }
-
-  @Test
-  public void testByZip() throws Exception {
-    String json = this.openweather.getByZip(1, "test");
-    OpenWeatherResponse response = this.parser.parseJson(json);
-    assertTrue(check(response));
-  }
-
 }

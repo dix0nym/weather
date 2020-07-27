@@ -142,10 +142,10 @@ public class OpenWeather {
       }
       return body;
     } catch (final MalformedURLException e) {
-      logger.error("failed to generate valid url: {} {}", e.getMessage(), e);
+      logger.error("failed to generate valid url: {}", e.getMessage());
       throw new OpenWeatherException("request url was malformed", e);
     } catch (final IOException e) {
-      logger.error("failed to perform API-Request: {} {}", e.getMessage(), e);
+      logger.error("failed to perform API-Request: {}", e.getMessage());
       throw new OpenWeatherException("failed to perform API-Request", e);
     }
   }

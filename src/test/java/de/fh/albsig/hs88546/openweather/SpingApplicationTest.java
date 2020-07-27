@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -27,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.fh.albsig.hs88546.Application;
 import de.fh.albsig.hs88546.controller.WeatherController;
 import de.fh.albsig.hs88546.services.OpenWeatherService;
-import de.fh.albsig.hs88546.services.XmlFormatter;
 
 @WebMvcTest(WeatherController.class)
 @ContextConfiguration(classes = { Application.class })
@@ -66,10 +66,8 @@ public class SpingApplicationTest {
   @MockBean
   private OpenWeatherService service;
 
-  @MockBean
-  private XmlFormatter formatter;
-
   @Test
+  @DisplayName("testing endpoint /weather/city")
   public void testGetByCityName() throws Exception {
     this.result = loadResult();
     when(service.getWeatherByCity(Mockito.anyString())).thenReturn(result);
@@ -78,6 +76,7 @@ public class SpingApplicationTest {
   }
 
   @Test
+  @DisplayName("testing endpoint /weather/id/")
   public void testGetByCityId() throws Exception {
     this.result = loadResult();
     when(service.getWeatherById(Mockito.anyInt())).thenReturn(result);
@@ -86,6 +85,7 @@ public class SpingApplicationTest {
   }
 
   @Test
+  @DisplayName("testing endpoint /weather/zip")
   public void testGetByZip() throws Exception {
     this.result = loadResult();
     when(service.getWeatherByZip(Mockito.anyInt(), Mockito.anyString())).thenReturn(result);
@@ -94,6 +94,7 @@ public class SpingApplicationTest {
   }
 
   @Test
+  @DisplayName("testing endpoint /weather/coords")
   public void testgetByCoords() throws Exception {
     this.result = loadResult();
     when(service.getWeatherByCoords(Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(result);

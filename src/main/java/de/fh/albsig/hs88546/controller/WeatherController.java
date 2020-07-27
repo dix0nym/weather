@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import de.fh.albsig.hs88546.Application;
 import de.fh.albsig.hs88546.openweather.OpenWeatherException;
 import de.fh.albsig.hs88546.services.OpenWeatherService;
-import de.fh.albsig.hs88546.services.XmlFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,11 @@ public class WeatherController {
 
   @Autowired
   private final OpenWeatherService service;
-  @Autowired
-  private final XmlFormatter formatter;
 
   private static Logger logger = LogManager.getLogger(Application.class);
 
-  public WeatherController(OpenWeatherService service, XmlFormatter formatter) {
+  public WeatherController(OpenWeatherService service) {
     this.service = service;
-    this.formatter = formatter;
   }
 
   /**
@@ -50,8 +46,8 @@ public class WeatherController {
       String weather = this.service.getWeatherByCity(city);
       return weather;
     } catch (OpenWeatherException | JsonProcessingException e) {
-      logger.error("failed to process requests (weatherByCityName): {}", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      logger.error("failed to process requests (weatherByCityName): {}", e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
     }
   }
 
@@ -68,8 +64,8 @@ public class WeatherController {
       String weather = this.service.getWeatherById(id);
       return weather;
     } catch (OpenWeatherException | JsonProcessingException e) {
-      logger.error("failed to process requests (weatherByCityId): {}", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      logger.error("failed to process requests (weatherByCityId): {}", e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
     }
   }
 
@@ -88,8 +84,8 @@ public class WeatherController {
       String weather = this.service.getWeatherByCoords(lat, lon);
       return weather;
     } catch (OpenWeatherException | JsonProcessingException e) {
-      logger.error("failed to process requests (weatherByCoord): {}", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      logger.error("failed to process requests (weatherByCoord): {}", e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
     }
   }
 
@@ -99,6 +95,7 @@ public class WeatherController {
    * @param code    - zipcode of city
    * @param country - country code: de, us, etc.
    * @return current weather as string
+   * @throws OpenWeatherException
    * @throws JsonProcessingException - if service fails to parse json
    */
   @RequestMapping(value = "/weather/zip/{code}/{country}", produces = {
@@ -109,8 +106,8 @@ public class WeatherController {
       String weather = this.service.getWeatherByZip(code, country);
       return weather;
     } catch (OpenWeatherException | JsonProcessingException e) {
-      logger.error("failed to process requests (weatherByZip): {}", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+      logger.error("failed to process requests (weatherByZip): {}", e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
     }
   }
 }

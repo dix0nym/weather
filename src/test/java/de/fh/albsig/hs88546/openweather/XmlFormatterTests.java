@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -108,6 +109,7 @@ public class XmlFormatterTests {
   }
 
   @Test
+  @DisplayName("testing XMLFormatter")
   public void testFormatterByCityId() throws Exception {
     OpenWeatherResponse response = this.parser.parseJson("test");
     String output = this.formatter.formatToXml(response);

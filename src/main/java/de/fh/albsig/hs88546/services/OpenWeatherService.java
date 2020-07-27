@@ -31,13 +31,12 @@ public class OpenWeatherService {
 
   /**
    * Constructor of OpenWeatherService.
-   * 
-   * @param apiKey - apikey for openweather api
    */
-  public OpenWeatherService(String apiKey) {
-    this.openweather = new OpenWeather(apiKey);
-    this.parser = new OpenWeatherParser();
-    this.formatter = new XmlFormatter();
+  public OpenWeatherService(OpenWeather openweather, OpenWeatherParser parser,
+      XmlFormatter formatter) {
+    this.openweather = openweather;
+    this.parser = parser;
+    this.formatter = formatter;
   }
 
   /**
