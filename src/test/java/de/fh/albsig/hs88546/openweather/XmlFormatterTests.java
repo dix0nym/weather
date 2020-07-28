@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +39,6 @@ public class XmlFormatterTests {
   private String result;
   private final File resultFile = new File("src/test/resources/weather.xml");
 
-  @AfterAll
-  public void clean() throws Exception {
-  }
-
   @BeforeEach
   public void create() throws Exception {
     this.formatter = new XmlFormatter();
@@ -51,7 +46,6 @@ public class XmlFormatterTests {
 
   @AfterEach
   public void eachclean() throws Exception {
-    this.parser = null;
     this.formatter = null;
   }
 
@@ -64,16 +58,14 @@ public class XmlFormatterTests {
     this.parser = mock(OpenWeatherParser.class);
     this.weather = createWeather();
     when(this.parser.parseJson(Mockito.anyString())).thenReturn(this.weather);
-    this.result = loadResult();
+    this.result = loadFile(resultFile);
   }
 
-  private String loadResult() throws FileNotFoundException, IOException {
-    // read file to string and add to mock
-    try (FileInputStream fis = new FileInputStream(resultFile)) {
-      byte[] data = new byte[(int) resultFile.length()];
+  private String loadFile(File infile) throws FileNotFoundException, IOException {
+    try (FileInputStream fis = new FileInputStream(infile)) {
+      byte[] data = new byte[(int) infile.length()];
       fis.read(data);
-      String str = new String(data, "UTF-8");
-      return str;
+      return new String(data, "UTF-8");
     }
   }
 

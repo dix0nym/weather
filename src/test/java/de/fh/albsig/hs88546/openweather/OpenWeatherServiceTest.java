@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +23,8 @@ import de.fh.albsig.hs88546.services.XmlFormatter;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpenWeatherServiceTest {
+  private final File resultFilte = new File("src/test/resources/weather.xml");
+  private final File inputFile = new File("src/test/resources/weather.json");
   String result;
   String json;
 
@@ -37,13 +38,8 @@ public class OpenWeatherServiceTest {
    */
   @BeforeAll
   public void init() throws Exception {
-    this.result = loadFile(new File("src/test/resources/weather.xml"));
-    this.json = loadFile(new File("src/test/resources/weather.json"));
-  }
-
-  @AfterAll
-  public void clean() throws Exception {
-    this.service = null;
+    this.result = loadFile(resultFilte);
+    this.json = loadFile(inputFile);
   }
 
   @BeforeEach
@@ -54,7 +50,8 @@ public class OpenWeatherServiceTest {
 
   @AfterEach
   public void eachclean() throws Exception {
-//    this.openweather = null;
+    this.service = null;
+    this.openweather = null;
   }
 
   @Test

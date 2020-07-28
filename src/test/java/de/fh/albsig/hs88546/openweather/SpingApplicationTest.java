@@ -33,9 +33,8 @@ import de.fh.albsig.hs88546.services.OpenWeatherService;
 @ContextConfiguration(classes = { Application.class })
 @TestInstance(Lifecycle.PER_CLASS)
 public class SpingApplicationTest {
-
-  private final File resultFile = new File("src/test/resources/weather.xml");
   String result;
+  private final File resultFile = new File("src/test/resources/weather.xml");
 
   /**
    * initialize test case.
@@ -43,7 +42,7 @@ public class SpingApplicationTest {
    */
   @BeforeAll
   public void init() throws Exception {
-    this.result = loadResult();
+    this.result = loadFile(resultFile);
   }
 
   @AfterAll
@@ -51,12 +50,11 @@ public class SpingApplicationTest {
     this.result = null;
   }
 
-  private String loadResult() throws FileNotFoundException, IOException {
-    try (FileInputStream fis = new FileInputStream(resultFile)) {
-      byte[] data = new byte[(int) resultFile.length()];
+  private String loadFile(File infile) throws FileNotFoundException, IOException {
+    try (FileInputStream fis = new FileInputStream(infile)) {
+      byte[] data = new byte[(int) infile.length()];
       fis.read(data);
-      String str = new String(data, "UTF-8");
-      return str;
+      return new String(data, "UTF-8");
     }
   }
 
@@ -69,7 +67,6 @@ public class SpingApplicationTest {
   @Test
   @DisplayName("testing endpoint /weather/city")
   public void testGetByCityName() throws Exception {
-    this.result = loadResult();
     when(service.getWeatherByCity(Mockito.anyString())).thenReturn(result);
     this.mockMvc.perform(get("/weather/city/any")).andDo(print()).andExpect(status().isOk())
         .andExpect(content().string(containsString(this.result)));
@@ -78,7 +75,6 @@ public class SpingApplicationTest {
   @Test
   @DisplayName("testing endpoint /weather/id/")
   public void testGetByCityId() throws Exception {
-    this.result = loadResult();
     when(service.getWeatherById(Mockito.anyInt())).thenReturn(result);
     this.mockMvc.perform(get("/weather/id/1")).andDo(print()).andExpect(status().isOk())
         .andExpect(content().string(containsString(this.result)));
@@ -87,7 +83,6 @@ public class SpingApplicationTest {
   @Test
   @DisplayName("testing endpoint /weather/zip")
   public void testGetByZip() throws Exception {
-    this.result = loadResult();
     when(service.getWeatherByZip(Mockito.anyInt(), Mockito.anyString())).thenReturn(result);
     this.mockMvc.perform(get("/weather/zip/1/de")).andDo(print()).andExpect(status().isOk())
         .andExpect(content().string(containsString(this.result)));
@@ -96,7 +91,6 @@ public class SpingApplicationTest {
   @Test
   @DisplayName("testing endpoint /weather/coords")
   public void testgetByCoords() throws Exception {
-    this.result = loadResult();
     when(service.getWeatherByCoords(Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(result);
     this.mockMvc.perform(get("/weather/coords/1/1")).andDo(print()).andExpect(status().isOk())
         .andExpect(content().string(containsString(this.result)));

@@ -29,7 +29,6 @@ import de.fh.albsig.hs88546.openweather.model.OpenWeatherResponse;
  */
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpenWeatherParserTest {
-  private final File testFile = new File("src/test/resources/weather.json");
   private OpenWeather openweather;
   private OpenWeatherParser parser;
 
@@ -48,13 +47,11 @@ public class OpenWeatherParserTest {
     this.parser = null;
   }
 
-  private String loadResult() throws FileNotFoundException, IOException {
-    // read file to string and add to mock
-    try (FileInputStream fis = new FileInputStream(testFile)) {
-      byte[] data = new byte[(int) testFile.length()];
+  private String loadFile(File infile) throws FileNotFoundException, IOException {
+    try (FileInputStream fis = new FileInputStream(infile)) {
+      byte[] data = new byte[(int) infile.length()];
       fis.read(data);
-      String str = new String(data, "UTF-8");
-      return str;
+      return new String(data, "UTF-8");
     }
   }
 
@@ -65,7 +62,7 @@ public class OpenWeatherParserTest {
   @BeforeAll
   public void init() throws Exception {
     this.openweather = mock(OpenWeather.class);
-    String json = loadResult();
+    String json = loadFile(new File("src/test/resources/weather.json"));
     when(this.openweather.getByCityId(Mockito.anyInt())).thenReturn(json);
     when(this.openweather.getByCityName(Mockito.anyString())).thenReturn(json);
     when(this.openweather.getByCoords(Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(json);
