@@ -37,11 +37,9 @@ public class WeatherController {
    * 
    * @param city - name of city
    * @return current weather as string
-   * @throws JsonProcessingException - if service fails to parse json
    */
   @RequestMapping(value = "/weather/city/{city}", produces = { MediaType.APPLICATION_XML_VALUE })
   public String weatherCity(@PathVariable("city") String city) {
-    logger.info("weather requested by city");
     try {
       String weather = this.service.getWeatherByCity(city);
       return weather;
@@ -56,7 +54,6 @@ public class WeatherController {
    * 
    * @param id - id of city
    * @return current weather as string
-   * @throws JsonProcessingException - if service fails to parse json
    */
   @RequestMapping(value = "/weather/id/{id}", produces = { MediaType.APPLICATION_XML_VALUE })
   public String weatherCityId(@PathVariable("id") int id) {
@@ -75,7 +72,6 @@ public class WeatherController {
    * @param lat - latitude
    * @param lon - longitude
    * @return current weather as string
-   * @throws JsonProcessingException - if service fails to parse json
    */
   @RequestMapping(value = "/weather/coords/{lat}/{lon}", produces = {
       MediaType.APPLICATION_XML_VALUE })
@@ -95,8 +91,6 @@ public class WeatherController {
    * @param code    - zipcode of city
    * @param country - country code: de, us, etc.
    * @return current weather as string
-   * @throws OpenWeatherException
-   * @throws JsonProcessingException - if service fails to parse json
    */
   @RequestMapping(value = "/weather/zip/{code}/{country}", produces = {
       MediaType.APPLICATION_XML_VALUE })

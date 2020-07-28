@@ -10,6 +10,12 @@ public class ExceptionResponse {
   private String timeStamp;
   private String trace;
 
+  /**
+   * constructor of ExceptionResponse.
+   * 
+   * @param status          - status of exception
+   * @param errorAttributes - attributes of exception regarding error
+   */
   public ExceptionResponse(int status, Map<String, Object> errorAttributes) {
     this.setStatus(status);
     this.setPath((String) errorAttributes.get("path"));

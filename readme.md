@@ -1,6 +1,6 @@
 # Weather-App
 
-Kleine Spring-Boot-Applikation, die das aktuelle Wetter durch die [API von OpenWeatherMap](https://openweathermap.org/api) im Format JSON bezieht. Die erhaltenen Wetterdaten werden aufbereitet und im Format XML dargestellt. Verschiedene Endpunkte der Applikation erlauben es, das Wetter nach Stadtname, Id der Stadt, Längen- und Breitengrade oder nach Postleitzahl zu suchen.
+Spring-Boot-Applikation, die das aktuelle Wetter durch die [API von OpenWeatherMap](https://openweathermap.org/api) im Format JSON bezieht. Die erhaltenen Wetterdaten werden aufbereitet und im Format XML dargestellt. Verschiedene Endpunkte der Applikation erlauben es, das Wetter nach Stadtname, Id der Stadt, Längen- und Breitengrade oder nach Postleitzahl zu suchen.
 
 ## Installation
 
