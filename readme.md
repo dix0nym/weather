@@ -30,12 +30,12 @@ im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/
 * `/weather/coords/{lat}/{lon}`
   * DOUBLE `lat` - Latitude
   * DOUBLE `lon` - Longitude
-  * Beispiel: [weather/coords/9/48](http://127.0.0.1:8080/weather/coords/9/48)
+  * Beispiel: [weather/coords/48.22/9.03](http://127.0.0.1:8080/weather/coords/48.22/9.03)
 
 * `/weather/zip/{code}/{country}`
   * INT `code` = Postleitzahl - z. B. 72458
   * STRING `country` = [Ländercode](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) z. B. de, us, it
-  * Beispiel: [/weather/zip/72458/de](http://127.0.0.1:8080/weather/weather/zip/72458/de)
+  * Beispiel: [/weather/zip/72458/de](http://127.0.0.1:8080/weather/zip/72458/de)
 
 ## Tools
 
