@@ -1,5 +1,7 @@
 # Weather-App
 
+Kleine Spring-Boot-Applikation, die das aktuelle Wetter durch die [API von OpenWeatherMap](https://openweathermap.org/api) im Format JSON bezieht. Die erhaltenen Wetterdaten werden aufbereitet und im Format XML dargestellt. Verschiedene implementierte Endpunkte erlauben es, das Wetter nach Stadtname, Id der Stadt, Längen -und Breitengrade oder nach Postleitzahl zu suchen.
+
 ## Installation
 
 ```bash
@@ -41,5 +43,5 @@ im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/
 
 * checkstyles: `mvn checkstyle:checkstyle`
 * spotbugs
-  * `mvn spotbugs:spotbugs`
-  * `mvn spotbugs:gui`
+  * `mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.4:spotbugs`
+  * `mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.4:gui`
