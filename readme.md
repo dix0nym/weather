@@ -30,8 +30,8 @@ im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/
   * Beispiel: [/weather/id/2958595](http://127.0.0.1:8080/weather/id/2958595)
 
 * `/weather/coords/{lat}/{lon}`
-  * DOUBLE `lat` - Latitude
-  * DOUBLE `lon` - Longitude
+  * DOUBLE `lat` - Breitengrad
+  * DOUBLE `lon` - Längengrad
   * Beispiel: [weather/coords/48.22/9.03](http://127.0.0.1:8080/weather/coords/48.22/9.03)
 
 * `/weather/zip/{code}/{country}`
