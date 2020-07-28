@@ -18,7 +18,7 @@ $ mvn spring-boot:run
 
 im Browser: [http://127.0.0.1:8080/weather/city/albstadt](http://127.0.0.1:8080/weather/city/albstadt)
 
-## API-Endpoints
+## REST-Endpoints
 
 * `/weather/city/{city}`
   * STRING `city` - Name der Stadt - z. B. Albstadt
